@@ -8,7 +8,7 @@ class App extends Component {
     return (
       <>
         <main className="container">
-          <MoviesComponent key={"1234"} />
+          <MoviesComponent />
         </main>
       </>
     );
