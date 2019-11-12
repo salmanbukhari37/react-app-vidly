@@ -13,13 +13,13 @@ class MoviesComponent extends Component {
     movies: [],
     movieGenres: [],
     pageSize: 5,
-    currentPage: 1
+    currentPage: 1,
+    selectedGenre: ''
   };
 
   componentDidMount() {
-    setInterval( () => {
-      this.setState({ movies: getMovies(), movieGenres: getGenres() })
-    }, 1000)
+    const movieGenres = [{name: "All Genres"} , ...getGenres()]
+    this.setState({ movies: getMovies(), movieGenres })
   }
 
   deleteMovie = movie => {
@@ -28,8 +28,6 @@ class MoviesComponent extends Component {
   };
 
    handlePageChange = page => {
-     console.log(page);
-     
     this.setState({ currentPage: page });
   };
 
@@ -42,58 +40,32 @@ class MoviesComponent extends Component {
     this.setState({ movies });
   }
 
+  handleGenreSelect = _id => {
+    this.setState({ selectedGenre: _id, currentPage: 1 })
+  }
+
   fetchTableData() {
     const { length: count } = this.state.movies;
     const {
       currentPage,
       pageSize,
       movies: allMovies,
-      movieGenres
+      movieGenres,
+      selectedGenre
     } = this.state;
 
     if (this.state.movies.length === 0)
-      return (
-        <div className="row" style={{backgroundColor: "#999"}}>
-          <svg width="38" height="38" viewBox="0 0 38 38" style={{textAlign: "center"}} >
-              <defs>
-                  <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
-                      <stop stop-color="#fff" stop-opacity="0" offset="0%"/>
-                      <stop stop-color="#fff" stop-opacity=".631" offset="63.146%"/>
-                      <stop stop-color="#fff" offset="100%"/>
-                  </linearGradient>
-              </defs>
-              <g fill="none" fill-rule="evenodd">
-                  <g transform="translate(1 1)">
-                      <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2">
-                          <animateTransform
-                              attributeName="transform"
-                              type="rotate"
-                              from="0 18 18"
-                              to="360 18 18"
-                              dur="0.9s"
-                              repeatCount="indefinite" />
-                      </path>
-                      <circle fill="#fff" cx="36" cy="18" r="1">
-                          <animateTransform
-                              attributeName="transform"
-                              type="rotate"
-                              from="0 18 18"
-                              to="360 18 18"
-                              dur="0.9s"
-                              repeatCount="indefinite" />
-                      </circle>
-                  </g>
-              </g>
-          </svg>
-      </div>);
+      return <p>Loading...</p>
 
-    const movies = paginate(allMovies, currentPage, pageSize);
+    const filteredMovies = selectedGenre ? allMovies.filter( m => m.genre._id === selectedGenre ) : allMovies;
+
+    const movies = paginate(filteredMovies, currentPage, pageSize);
     return (
       <>
-        <p>Showing {this.state.movies.length} movies in the database.</p>
+        <p>Showing {filteredMovies.length} movies in the database.</p>
         <div className="row">
           <div className="col-2">
-            <SideBarComponent movieGenres={movieGenres}/>
+            <SideBarComponent selectedItem={this.state.selectedGenre} movieGenres={movieGenres} onItemSelect={this.handleGenreSelect}/>
           </div>
           <div className="col">
             <table className="table">
@@ -137,7 +109,7 @@ class MoviesComponent extends Component {
               </tbody>
             </table>
             <PaginationComponent 
-              itemsCount={count}
+              itemsCount={filteredMovies.length}
               pageSize={pageSize}
               currentPage={currentPage}
               onPageChange={this.handlePageChange}
