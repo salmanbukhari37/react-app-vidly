@@ -49,27 +49,43 @@ class MoviesComponent extends Component {
     this.setState({ selectedGenre: _id, currentPage: 1 })
   }
 
-  fetchTableData() {
+  getPagedData () {
+
     const {
       currentPage,
       pageSize,
       movies: allMovies,
-      movieGenres,
       selectedGenre,
       sortedColumn
     } = this.state;
 
-    if (this.state.movies.length === 0)
-      return <p>Loading...</p>
 
     const filteredMovies = selectedGenre ? allMovies.filter( m => m.genre._id === selectedGenre ) : allMovies;
 
     const sorted = _.orderBy(filteredMovies, [sortedColumn.path], [sortedColumn.order]);
     
     const movies = paginate(sorted, currentPage, pageSize);
+
+    return {
+      countedMovies : filteredMovies.length, 
+      data: movies
+    }
+  }
+
+
+  fetchTableData() {
+    const {
+      currentPage,
+      pageSize,
+      movieGenres,
+      sortedColumn
+    } = this.state;
+
+    const {countedMovies, data: movies} = this.getPagedData();
+
     return (
       <>
-        <p>Showing {filteredMovies.length} movies in the database.</p>
+        <p>Showing {countedMovies} movies in the database.</p>
         <div className="row">
           <div className="col-2">
             <SideBarComponent 
@@ -85,7 +101,7 @@ class MoviesComponent extends Component {
               onDelete={this.deleteMovie} 
               onSort={this.handleSort}/>
             <PaginationComponent 
-              itemsCount={filteredMovies.length}
+              itemsCount={countedMovies}
               pageSize={pageSize}
               currentPage={currentPage}
               onPageChange={this.handlePageChange}
