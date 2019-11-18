@@ -7,6 +7,7 @@ import { paginate } from '../utils/paginate'
 import { SideBarComponent } from "./common/SideBarComponent";
 import MoviesTable from './MoviesTable';
 import _ from 'lodash';
+import NavBar from "./common/NavBar";
 
 class MoviesComponent extends Component {
   state = {
@@ -85,27 +86,30 @@ class MoviesComponent extends Component {
 
     return (
       <>
-        <p>Showing {countedMovies} movies in the database.</p>
-        <div className="row">
-          <div className="col-2">
-            <SideBarComponent 
-              selectedItem={this.state.selectedGenre} 
-              movieGenres={movieGenres} 
-              onItemSelect={this.handleGenreSelect}/>
-          </div>
-          <div className="col">
-            <MoviesTable 
-              movies={movies} 
-              sortedColumn={sortedColumn}
-              onLike={this.handleLike} 
-              onDelete={this.deleteMovie} 
-              onSort={this.handleSort}/>
-            <PaginationComponent 
-              itemsCount={countedMovies}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={this.handlePageChange}
-            />
+        <NavBar />
+        <div className="container">
+          <p>Showing {countedMovies} movies in the database.</p>
+          <div className="row">
+            <div className="col-2">
+              <SideBarComponent 
+                selectedItem={this.state.selectedGenre} 
+                movieGenres={movieGenres} 
+                onItemSelect={this.handleGenreSelect}/>
+            </div>
+            <div className="col">
+              <MoviesTable 
+                movies={movies} 
+                sortedColumn={sortedColumn}
+                onLike={this.handleLike} 
+                onDelete={this.deleteMovie} 
+                onSort={this.handleSort}/>
+              <PaginationComponent 
+                itemsCount={countedMovies}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChange={this.handlePageChange}
+              />
+            </div>
           </div>
         </div>
       </>

@@ -7,9 +7,7 @@ class App extends Component {
   render() {
     return (
       <>
-        <main className="container">
           <MoviesComponent />
-        </main>
       </>
     );
   }
