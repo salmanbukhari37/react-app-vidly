@@ -7,7 +7,6 @@ import { paginate } from '../utils/paginate'
 import { SideBarComponent } from "./common/SideBarComponent";
 import MoviesTable from './MoviesTable';
 import _ from 'lodash';
-import NavBar from "./common/NavBar";
 
 class MoviesComponent extends Component {
   state = {
@@ -86,7 +85,6 @@ class MoviesComponent extends Component {
 
     return (
       <>
-        <NavBar />
         <div className="container">
           <p>Showing {countedMovies} movies in the database.</p>
           <div className="row">
