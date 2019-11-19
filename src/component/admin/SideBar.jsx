@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const SideBar = () => {
     return ( <ul>
-                <Link to="/admin/user"><li>User</li></Link>
-                <Link to="/admin/post"><li>Post</li></Link>
+                <NavLink to='/admin/user'>{<li>User</li>}</NavLink>
+                <NavLink to="/admin/post">{<li>Post</li>}</NavLink>
             </ul> );
 }
  
