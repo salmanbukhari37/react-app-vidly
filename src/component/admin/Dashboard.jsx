@@ -1,13 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import SideBar from './SideBar';
+import { Route } from 'react-router-dom';
+import User from './User';
+import Posts from './Posts';
 
 const Dashboard = () => {
     return ( <div>
                 <h1>Welcome Admin, The New Dashboard</h1>
-                <ul>
-                    <Link to="/admin/user"><li>User</li></Link>
-                    <Link to="/admin/post"><li>Post</li></Link>
-                </ul>
+                <SideBar />
+                <Route path="/admin/user" component={User}/>
+                <Route path="/admin/post" component={Posts}/>
             </div> );
 }
  
